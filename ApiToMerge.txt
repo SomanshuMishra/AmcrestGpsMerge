@@ -1,0 +1,22 @@
+APIs to merge:-
+
+1)http://127.0.0.1:8000/api/devices/494644176?category=gps => Done
+2)http://127.0.0.1:8000/auth/login?category=gps => Done
+3)http://127.0.0.1:8000/api/last/trip/862061048042724/494644176?category=obd =>Done
+4)http://127.0.0.1:8000/api/trips/dates/494644176/862061048042724?	=>Done
+5)http://127.0.0.1:8000/api/zones/494644176?category=gps	 => Done => Checked on Postman
+6)http://127.0.0.1:8000/api/zone_groups/494644176?category=gps =>No Category used in Code
+
+	
+-----------------------------------------------------------------------------------------------
+
+1)http://127.0.0.1:8000/api/zone_alert?customer_id=494644176&category=gps =>DONE
+2)http://127.0.0.1:8000/api/setting/devices/494644176=> Done
+3)http://127.0.0.1:8000/api/cancelled/device/list/494644176 => Done
+4)http://127.0.0.1:8000/info/mobile/service_provider => Done
+5)http://127.0.0.1:8000/api/map/settings => Done
+6)http://127.0.0.1:8000/info/countries => Done => Checked on Postman
+7)http://127.0.0.1:8000/info/timezones => Done => Checked on Postman
+
+
+ref. no.: 61d6a91412a9f3034b54f64c

@@ -1,0 +1,4 @@
+#!/bin/sh
+sudo lsof -i:8000 | awk 'NR!=1 {print $2}' | xargs kill -9  || true
+sudo lsof -i:8001 | awk 'NR!=1 {print $2}' | xargs kill -9  || true
+sudo rm -rf /home/ubuntu/amcrest_gps_pro/*

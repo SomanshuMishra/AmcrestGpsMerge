@@ -1,0 +1,25 @@
+OUT_OF_ZONE = out_of_zone
+IN_NO_GO_ZONE = no_go_zone
+IN_KEEP_IN_ZONE = keep_in
+OUT_OF_NO_GO_ZONE = out_no_go_zone
+ENGINE_START =  engine_start
+ENGINE_STOP = engine_stop 
+TRIP_START = trip_start
+TRIP_END = trip_end
+
+
+-----------------------------------
+Notification Type:
+-----------------------------------
+trip_start
+trip_stop
+engine
+zone
+zone_no_go
+speed
+harsh_breaking
+harsh_acceleration
+harsh_turning
+harsh_braking_and_turning
+harsh_acceleration_and_turning
+speed_unknown_harsh

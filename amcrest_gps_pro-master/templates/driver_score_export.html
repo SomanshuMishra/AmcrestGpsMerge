@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+#customers {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 14px;
+}
+
+#customers td, #customers th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#customers tr:nth-child(even){background-color: #f2f2f2;}
+
+#customers tr:hover {background-color: #ddd;}
+
+#customers th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #177cb6;
+  color: white;
+}
+
+img{
+	width: 200px !important; height: 20px !important; margin-bottom:5px !important;
+}
+</style>
+</head>
+<body style="margin: 0px !important;">
+<div style="text-align: center !important;">
+	<img src="https://amcrest-static.s3.amazonaws.com/logo-white.png"  style=" ">
+</div>
+
+
+<table id="customers">
+  <tr>
+    <th>IMEI</th>
+    <th>Driver Export</th>
+    <th>Date</th>
+  </tr>
+  {% for i in data %}
+		<tr>
+			<td>{{i.imei}}</td>
+			<td>{% if i.driver_score %} {{i.driver_score}} {%else%} 0{% endif %}</td>
+			<td>{{i.record_date}}</td>
+		</tr>
+	{% endfor %}
+</table>
+
+</body>
+</html>

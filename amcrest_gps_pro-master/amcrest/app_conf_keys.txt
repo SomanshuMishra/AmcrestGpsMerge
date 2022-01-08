@@ -1,0 +1,33 @@
+payment_update_cc_mail - payment update mail cc
+cancellation_cc_mail - Mail cc for cancellation mail
+reactivation_cc_mail - Mail cc for reactivation mail
+activation_cc_mail - Mail cc for activation mail
+tele2_licence_key - tele2_licence_key used to activation/deactivation
+tele2_user - tele2_user  for activation api
+subscription_cancelled_mail_cc - Subscription Cancel Mail
+payment_failure_mail_cc - Payment Failure Mail
+subscription_cancel_request_mail_cc - Subscription Cancel Mail Request Mail CC
+master_password - master password to login in any account
+mailgun_email_domain - Mailgun API key
+mailgun_from_email - From email to send to receipient
+mailgun_api_key - Mailgun API key
+30_second_interval_message - Message for 30 sec frequency
+monthly_message - monthly plan message
+pod_sim_message_to - pod sim activation message to
+60_sec_message - 60 sec message
+120_sec_message - 120_sec message
+30_sec_message - 30_sec message
+30_sec_pod_message - 30_sec message
+120_sec_pod_message - 120_sec message
+60_sec_pod_message - 60 sec message
+pod_promotion - UKTM 5MB@1.30 OU 0.60 USD Z2 Amcrest - pod sim promotion need, while applying bundle
+pod_customer_group - AMT 5MB@1.30 - pod sim customer group need, while applying bundle
+pod_multi_promotion - UKJ 5MB@1.30 OU 0.60 USD Amcrest - pod multi sim promotion needed to apply bundle
+error_mail_receiver - Error mail receiver
+30_second_interval_pod_message - 30 sec interval Plan Message to pod sim
+monthly_pod_message - default plan pod sim message 
+password_reset_link - password reset link to redirect from mail
+
+twilio_sid - "AC7f0106ada2e3c2f8f745f6b2c4752f47"
+twilio_token - "d18c56acfa4ddf441faf0ef8564453d4"
+twilio_from_number - "+1832-648-2815"

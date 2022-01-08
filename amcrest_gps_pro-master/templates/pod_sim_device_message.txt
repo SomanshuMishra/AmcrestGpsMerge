@@ -1,0 +1,3 @@
+Send Message to POD sim
+iccid : {{iccid}}
+message : {{message}}

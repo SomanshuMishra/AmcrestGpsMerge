@@ -1,0 +1,22 @@
+Your GPS Tracker is Now Active!
+
+Login : {{user.email}}
+                  
+www.amcrestgps.net and login to your GPS tracking account.
+
+Keep this email in case your account needs to be verified in the future
+Customer ID: {{user.customer_id}}
+{% for device in subscription %}
+ ********************{{ forloop.counter }}********************
+ 
+Subscription ID:{{device.subscription_id}}
+Service Plan: Monthly
+First Bill Date: {{device.firstBillingDate}}
+Next Bill Date: {{device.nextBillingDate}}
+IMEI: {{device.imei_no}}
+ICCID:{{device.imei_iccid}}
+
+{% endfor %}
+Having trouble with your device? Contact us at
+amcrestgpssupport@amcrest.com
+Track Anything, From Anywhere.

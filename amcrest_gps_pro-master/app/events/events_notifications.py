@@ -1,0 +1,1 @@
+zone_events_notification = ['keep_in', 'no_go_zone']

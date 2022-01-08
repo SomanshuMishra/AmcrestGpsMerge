@@ -1,0 +1,15 @@
+Your Payment Method Updated!
+
+
+                  
+www.amcrestgps.net and login to your GPS tracking account.
+
+Keep this email in case your account needs to be verified in the future
+Customer ID: {{user.customer_id}}
+
+ 
+
+
+Having trouble with your device? Contact us at
+amcrestgpssupport@amcrest.com
+Track Anything, From Anywhere.

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+#customers {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 14px;
+}
+
+#customers td, #customers th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#customers tr:nth-child(even){background-color: #f2f2f2;}
+
+#customers tr:hover {background-color: #ddd;}
+
+#customers th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #177cb6;
+  color: white;
+}
+
+img{
+	width: 200px !important; height: 20px !important; margin-bottom:5px !important;
+}
+</style>
+</head>
+<body style="margin: 0px !important;">
+<div style="text-align: center !important;">
+	<img src="https://amcrest-static.s3.amazonaws.com/logo-whiteBG.png"  style=" ">
+</div>
+
+
+<table id="customers">
+  <tr>
+  	<th>Trip No.</th>
+    <th>Started At</th>
+    <th>Ended At</th>
+    <th>Distance ({{unit}})</th>
+    <th>Duration</th>
+    <th>From</th>
+    <th>To</th>
+  </tr>
+  {% for i in data %}
+		<tr>
+			<td>{{i.count}}</td>
+			<td>{{i.started_at}}</td>
+			<td>{{i.ended_at}}</td>
+			<td>{{i.distance}}</td>
+			<td>{{i.duration}}</td>
+			<td>{{i.from}}</td>
+			<td>{{i.to}}</td>
+		</tr>
+	{% endfor %}
+</table>
+
+</body>
+</html>
+

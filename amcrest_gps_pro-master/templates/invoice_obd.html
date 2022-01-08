@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Amcrest GPS Fleet Invoice</title>
+</head>
+<body>
+	<table align="center" border="0px solid black" style="max-width:21cm; width:100%; background: #1b234f;">
+		<tbody style="max-width:21cm; width:100%; height: 10px;">
+			<tr style="margin: 10px; border-bottom: 10px solid black;">
+				<td style="font-family: Helvetica, Arial, sans-serif; font-size: 15px; font-weight: normal; text-align: left; border: 0px; color: white; padding-left: 15px;">Invoice : {{invoice_id}}</td>
+				<td style="font-size: 0; border: 0;"><img style="float: right; height: 50px !important; margin: 0px !important; padding: 0px !important;" alt="AMCREST - Simple. Reliable. Secure" src="https://s3.amazonaws.com/amcrest-static/email_top.png"></td>
+			</tr>
+		</tbody>
+	</table>
+
+	<table align="center" border="0px solid black" style="max-width:21cm; width:100%">
+		<tbody style="max-width:21cm; width:100%">
+			<tr style="border-bottom: 10px solid black; padding: 10px;">
+				<td style="font-family: Helvetica, Arial, sans-serif; font-size: 12px; font-weight: normal; text-align: left; border: 0px; padding-left: 5px;"><strong>Invoice Date :{{invoice_date}}</strong></td>
+				<td style="font-family: Helvetica, Arial, sans-serif; font-size: 12px; font-weight: normal; text-align: right; border: 0px; padding-top: 20px; padding-right: 15px;">
+					<b>{{customer_name}}</b>
+					<br>{{customer_mail_id}}
+					<br>{{customer_address}}
+					<br>{{customer_city}}
+					<br>{{customer_state}}
+					<br>{{customer_country}}
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<br><br>
+	<table align="center" border="0px solid black" style="max-width:21cm; width:100%">
+		<tbody style="max-width:21cm; width:100%">
+			<tr style="margin: 10px; border-bottom: 10px solid black;">
+				<td style="font-family: Helvetica, Arial, sans-serif; font-size: 15px; font-weight: normal; text-align: left; border: 0px;"><strong>Summery of Invoice :</strong></td>
+			</tr>
+		</tbody>
+	</table>
+	<hr border="1px solid black" style="max-width:21cm; width:100%;">
+	<table align="center" border="0px solid black" style="max-width:21cm; width:100%">
+		<tbody style="max-width:21cm; width:100%">
+			<tr style="margin: 10px; border-bottom: 10px solid black;">
+				<th style="font-family: Helvetica, Arial, sans-serif; font-size: 12px; font-weight: normal; text-align: left;"><strong>Plan Description</strong></th>
+				<th style="font-family: Helvetica, Arial, sans-serif; font-size: 12px; font-weight: normal; text-align: center;"><strong>Billing Date</strong></th>
+				<th style="font-family: Helvetica, Arial, sans-serif; font-size: 12px; font-weight: normal; text-align: right;"><strong>Subtotal(USD)</strong></th>
+			</tr>
+		</tbody>
+	</table>
+	<hr border="1px solid black" style="max-width:21cm; width:100%;">
+	<table align="center" border="0px solid black" style="max-width:21cm; width:100%">
+		<tbody style="max-width:21cm; width:100%">
+			<tr style="margin: 20px; border-bottom: 10px solid black;">
+				<td style="font-family: Helvetica, Arial, sans-serif; font-size: 12px; font-weight: normal;">{{plan_desc_1}}</td>
+				<td style="font-family: Helvetica, Arial, sans-serif; font-size: 12px; font-weight: normal;">{{start_date_1}} - {{end_date_1}}</td>
+				<td style="font-family: Helvetica, Arial, sans-serif; font-size: 12px; font-weight: normal; text-align: right;">{{amount_1}}$</td>
+			</tr>
+		</tbody>
+	</table>
+	<br>
+	<br>
+	<table align="center" border="0px solid black" style="max-width:21cm; width:100%">
+		<tbody style="max-width:21cm; width:100%">
+			<tr style="margin: 20px; border-bottom: 10px solid black;">
+				<td style="font-family: Helvetica, Arial, sans-serif; font-size: 12px; font-weight: normal;"> &nbsp;</td>
+				<td style="font-family: Helvetica, Arial, sans-serif; font-size: 15px; font-weight: normal; float: right;"><strong>Total</strong></td>
+				<td style="font-family: Helvetica, Arial, sans-serif; font-size: 15px; font-weight: normal; text-align: right;"><strong>{{amount_1}}$</strong></td>
+			</tr>
+		</tbody>
+	</table>
+
+	<br>
+	<br>
+	<table align="center" border="0px solid black" style="max-width:21cm; width:100%;">
+		<tbody style="max-width:21cm; width:100%; height: 10px;">
+			<tr style="margin: 10px; border-bottom: 10px solid black;">
+				<td style="font-family: Helvetica, Arial, sans-serif; font-size: 15px; font-weight: normal; text-align: left; border: 0px;"><strong>Payment Method</strong> : </td>
+				<td style="font-family: Helvetica, Arial, sans-serif; font-size: 15px; font-weight: normal; text-align: left; border: 0px;">{{credit_card_details.card_type}} - **** **** **** {{credit_card_details.last_4}}</td>
+			</tr>
+		</tbody>
+	</table>
+	<br>
+	<br>
+
+	{% if status != 'voided' %}
+		{% if status != 'Canceled' %}
+		<table align="center" border="0px solid black" style="max-width:21cm; width:100%;">
+			<tbody style="max-width:21cm; width:100%; height: 10px;">
+				<tr style="margin: 10px; border-bottom: 10px solid black;">
+					<td style="font-family: Helvetica, Arial, sans-serif; font-size: 15px; font-weight: normal; text-align: left; border: 0px;"><strong>Next Billing Date</strong> : </td>
+					<td style="font-family: Helvetica, Arial, sans-serif; font-size: 15px; font-weight: normal; text-align: left; border: 0px;">{{next_billing_date}}</td>
+				</tr>
+			</tbody>
+		</table>
+		{%endif%}
+	{%endif%}
+
+	<p style="font-family: Helvetica, Arial, sans-serif; font-size: 12px; font-weight: normal; text-align: center; margin-top: 100px;">Thank you for registering with Amcrest GPS Fleet</p>
+</body>
+</html>

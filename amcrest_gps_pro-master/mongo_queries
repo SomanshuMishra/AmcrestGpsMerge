@@ -1,0 +1,16 @@
+mongodump --uri="mongodb+srv://santosh:SmEReaqhYr7RVhnZ@amcrestobd-hhn08.mongodb.net/test?ssl=true&authSource=admin" --collection="trips_mesurement"
+
+mongorestore --uri="mongodb+srv://santosh:SmEReaqhYr7RVhnZ@amcrestobd-hhn08.mongodb.net/test?ssl=true&authSource=admin" --port 27017 --db test --collection trips_mesurement_backup /root/dump/test/trips_mesurement.bson
+
+
+mongoexport --db sDB --collection user_trip --query '{"record_date_timezone":{$gt: new Date('2020-12-22 00:00:00')}}' --out test.json;
+
+mongo "mongodb+srv://amcrestobd.hhn08.mongodb.net/test" --username santosh
+
+mongoexport --uri="mongodb+srv://santosh:SmEReaqhYr7RVhnZ@amcrestobd-hhn08.mongodb.net/test?ssl=true&authSource=admin"  --collection=user_trip  --query "{'record_date_timezone':{'$gte':{ '$date' : '2020-12-22 00:00:00' } }}" --out test.json
+
+new Date("2020-12-22 00:00:00")
+
+mongoexport.exe -h *MYHOST* -p *MYPORT* -q "{ 'time' : { '$gte' : { '$date' : '2014-12-21 12:57:00.506Z' },'$lt' : { '$date' : '2014-12-21 12:59:00.506Z' } } }"
+
+mongoexport  --uri="mongodb+srv://santosh:SmEReaqhYr7RVhnZ@amcrestobd-hhn08.mongodb.net/test?ssl=true&authSource=admin" -d test -c user_trip  -q '{ "record_date_timezone" : { "$gte" : { "$date" : "2020-12-22T00:00:00.000Z" }}}'

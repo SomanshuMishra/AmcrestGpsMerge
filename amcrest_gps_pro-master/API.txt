@@ -1,0 +1,400 @@
+1. User Register
+	API - /auth/register
+	Method - POST
+	Request - 
+		{
+			"first_name":"mayur",
+			"last_name":"Patil",
+			"email":"mayur@gmail.com",
+			"phone_number":"9019802163",
+			"password":"mayur@12345",
+			"order_id":"12345",
+			"address":"#1134, Tanaji Galli, Peeranwadi",
+			"city":"Belgaum",
+			"state":"Karnataka",
+			"zip":"590014",
+			"country":"India",
+			"status":131112,
+			"company":"Amcrest",
+			"customer_id":"123456",
+			"subscription_id":"232332",
+			"transaction_id":"31ed13",
+			"assetname":"32ed2332",
+			"subscription_status":"2e2e23e3",
+			"topic_id":"23e3232",
+			"time_zone":"UTC",
+			"language":"it",
+			"hits":2.223,
+			"rate":33.33,
+			"later_time":43,
+			"later_flag":44,
+			"uom":"2"
+		}
+
+	Response - 
+		Success - 
+{
+"message": "User Register Successfully",
+"status": true,
+"status_code":201
+}
+		----------------------------------------------
+Failure - 
+{
+"message": "User with this Email-id already exist",
+"status": false,
+"status_code":400
+}
+			------------------------------------------
+{
+"message": "Email-id and Password Required for register",
+"status": false,
+"status_code":400
+}
+
+#############################################################################
+
+2. User Login
+	API - /auth/login
+	Method - POST
+	Request - 
+		{
+			"email":"mayur1@gmail.com",
+			"password":"password",
+		}
+	Response - 
+		Success - 
+			{
+			    "user": {
+			       <UserOBJ>
+			    },
+			    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJ1c2VybmFtZSI6Im1heXVyMUBnbWFpbC5jb20iLCJleHAiOjE1NDY2MTQ1ODEsImVtYWlsIjoibWF5dXIxQGdtYWlsLmNvbSIsIm9yaWdfaWF0IjoxNTQ2NDQxNzgxfQ.KdXst0lyT4Qc6zjU2Mv9QaFNfdEpKxwEQ-FWz25Mung",
+			    "status": true
+			}
+		--------------------------------------------
+		Failure - 
+			{
+			    "message": "User Account doesn't exist",
+			    "status": false
+			}
+
+##############################################################################
+{
+"message": "List of devices",
+"devices": [
+{
+"gps_id": 171,
+"customer_id": 841768718,
+"imei_no": "864251020316075",
+"device_name": "Device 1",
+"id": 1,
+"device_details": {
+    "engine_rpm": 0,
+    "engine_coolant_temp": 78,
+    "speed": 0,
+    "longitude": 85.815785,
+    "latitude": 20.356115,
+    "mileage": 43.5,
+    "send_time": 20181228132117,
+    "fuel_level_input": null,
+    "vehicle_speed": 0,
+    "obd_power_voltage": 12988
+}
+},
+{
+"gps_id": 286,
+"customer_id": 841768718,
+"imei_no": "864251020319244",
+"device_name": "Device 2",
+"id": 2,
+"device_details": {
+    "engine_rpm": 0,
+    "engine_coolant_temp": 78,
+    "speed": 0,
+    "longitude": 85.815785,
+    "latitude": 20.356115,
+    "mileage": 43.5,
+    "send_time": 20181228132117,
+    "fuel_level_input": null,
+    "vehicle_speed": 0,
+    "obd_power_voltage": 12988
+}
+}
+],
+"status": true,
+"status_code": 200
+}
+
+
+####################################################################################################
+Zones based on customer - 
+
+create zone -------
+	API - /api/zones/<customer_id>
+	Method - POST
+	request - 
+		{
+			"name":"Test zone",
+			"coordinates": "[{'lat' : '25.535345', 'lng' : '987.213123'}, {'lat' : '25.535345', 'lng' : '987.213123'}]",
+			"type":"keep-in"
+		}
+	Response - 
+		{
+		    "message": "Zone Created Successfully",
+		    "status_code": 201,
+		    "status": true,
+		    "zone": {
+		        "id": 2,
+		        "name": "Test zone",
+		        "coordinates": "[{'lat' : '25.535345', 'lng' : '987.213123'}, {'lat' : '25.535345', 'lng' : '987.213123'}]",
+		        "type": "keep-in",
+		        "customer_id": "841768718",
+		        "status": true,
+		        "created_on": "2019-01-03T12:55:50.794440Z",
+		        "updated_on": "2019-01-03T12:55:50.794500Z",
+		        "zone_group": null
+		    }
+		}
+
+
+----------------------------------------------------------------------------------------------
+Get Zones List
+	API - /api/zones/<customer_id>
+	Method - GET
+	Response - 
+		{
+    "message": "Zone list successfull",
+    "status": true,
+    "status_code": 200,
+    "zone": [
+			    {
+			    	"id":1,
+			        "name": "Test zone",
+			        "coordinates": "[{'lat' : '25.535345', 'lng' : '987.213123'}, {'lat' : '25.535345', 'lng' : '987.213123'}]",
+			        "type": "keep-in",
+			        "created_on": "2019-01-03T11:54:47.576914Z",
+			        "updated_on": "2019-01-03T11:54:47.576968Z",
+			        "status": true
+			    },
+			    {
+			    	"id":2,
+			        "name": "Test zone",
+			        "coordinates": "[{'lat' : '25.535345', 'lng' : '987.213123'}, {'lat' : '25.535345', 'lng' : '987.213123'}]",
+			        "type": "keep-in",
+			        "created_on": "2019-01-03T12:55:50.794440Z",
+			        "updated_on": "2019-01-03T12:55:50.794500Z",
+			        "status": true
+			    }
+			]
+			}
+
+-------------------------------------------------------------------------------------
+Get Zone by Id
+	API - /api/zones/zone/<zone_id>
+	Method - GET
+	Response - 
+	{
+	"message": "Zone details",
+	"status": true,
+	"status_code": 200,
+	"zone": {
+	    "id": 1,
+	    "name": "Test zone",
+	    "coordinates": "[{'lat' : '25.535345', 'lng' : '987.213123'}, {'lat' : '25.535345', 'lng' : '987.213123'}]",
+	    "type": "keep-in",
+	    "created_on": "2019-01-03T11:54:47.576914Z",
+	    "updated_on": "2019-01-03T13:04:50.672151Z",
+	    "status": false
+	}
+	}
+
+	Error - 
+		{
+		    "message": "Invalid Zone",
+		    "status_code": 404,
+		    "status": false
+		}
+
+
+
+
+
+-----------------------------------------------------------------------------------
+Update zone - 
+	API - /api/zones/zone/<zone_id>
+	Method - PUT
+	Request - 
+		 {
+	        "name": "Test zone",
+	        "coordinates": "[{'lat' : '25.535345', 'lng' : '987.213123'}, {'lat' : '25.535345', 'lng' : '987.213123'}]",
+	        "type": "keep-in",
+	        "status": false
+	    }
+	Response - 
+		{
+		    "message": "Zone Updated Successfully",
+		    "status": true,
+		    "status_code": 204,
+		    "zone": {
+		        "id": 1,
+		        "name": "Test zone",
+		        "coordinates": "[{'lat' : '25.535345', 'lng' : '987.213123'}, {'lat' : '25.535345', 'lng' : '987.213123'}]",
+		        "type": "keep-in",
+		        "customer_id": "841768718",
+		        "status": false,
+		        "created_on": "2019-01-03T11:54:47.576914Z",
+		        "updated_on": "2019-01-03T13:04:50.672151Z",
+		        "zone_group": null
+		    }
+		}
+
+-----------------------------------------------------------------------------
+Delete Zone 
+	API - /api/zones/zone/<zone_id>
+	Method - DELETE
+	Request - 
+		{}
+	Response - 
+		{
+		    "message": "Zone Deleted Successfully",
+		    "status": true,
+		    "status_code": 204
+		}
+	Error - 
+		{
+		    "message": "Invalid Zone selected",
+		    "status_code": 404,
+		    "status": false
+		}
+###############################################################################################
+Create Zone Group 
+	API - /api/zone_groups/<customer_id>
+	Method - POST
+	Request - 
+		{
+			"name":"Zone Group 1"
+		}
+	Response - 
+		{
+		    "message": "Zone Group Created Successfully",
+		    "status_code": 201,
+		    "status": true,
+		    "zone_group": {
+		        "id": 1,
+		        "name": "Zone Group 1",
+		        "created_by": "841768718",
+		        "created_on": "2019-01-03T11:56:45.036289Z",
+		        "updated_on": "2019-01-03T11:56:45.036351Z"
+		    }
+		}
+
+	Error - 
+		{
+		    "message": "Error while creating zone group",
+		    "status_code": 400,
+		    "status": false,
+		    "errors": {
+		        "name": [
+		            "This field may not be blank."
+		        ]
+		    }
+		}
+
+----------------------------------------------------------------------------
+Get Zone Groups
+	API - /api/zone_groups/<customer_id>
+	Method - GET
+	Response - 
+		{
+		    "message": "Zone group listing successfull",
+		    "status": true,
+		    "status_code": 200,
+		    "zone_group": [
+		        {
+		            "id": 1,
+		            "name": "Zone Group 1",
+		            "created_on": "2019-01-03T11:56:45.036289Z",
+		            "updated_on": "2019-01-03T11:56:45.036351Z"
+		        }
+		    ]
+		}
+	Error - 
+		{
+		    "message": "Zone group listing successfull",
+		    "status": true,
+		    "status_code": 200,
+		    "zone_group": [ ]
+		}
+
+--------------------------------------------------------------------------------
+Get Zone by id
+	API - /api/zone_grous/zone_group/<zone_group_id>
+	Method - GET
+	Respose - 
+		{
+		    "message": "Zone Group details",
+		    "status": true,
+		    "status_code": 200,
+		    "zone_group": {
+		        "id": 1,
+		        "name": "Zone Group 1",
+		        "created_on": "2019-01-03T11:56:45.036289Z",
+		        "updated_on": "2019-01-03T11:56:45.036351Z"
+		    }
+		}
+	Error - 
+		{
+		    "message": "Invalid Zone Group",
+		    "status_code": 404,
+		    "status": false
+		}
+------------------------------------------------------------------------------
+Update Zone Group
+	API - /api/zone_groups/zone_group/<zone_group_id>
+	Method - PUT
+	Request - 
+		{
+        "name": "Zone Group 11"
+ 		}
+
+ 	Success - 
+ 		{
+    "message": "Zone Group Updated Successfully",
+    "status": true,
+    "status_code": 204,
+    "zone_group": {
+        "id": 2,
+        "name": "Zone Group 1 updated",
+        "created_by": "841768718",
+        "created_on": "2019-01-04T11:47:11.087586Z",
+        "updated_on": "2019-01-04T11:47:32.228999Z"
+    }
+}
+ 	Error:
+ 		{
+		    "message": "Error while Updating code",
+		    "status_code": 400,
+		    "status": false,
+		    "errors": {
+		        "name": [
+		            "This field may not be blank."
+		        ]
+		    }
+		}
+
+--------------------------------------------------------------------------------
+Delete Zone Group
+	API - /api/zone_grous/zone_group/<zone_group_id>
+	Method - DELETE
+	Respone - 
+		{
+		    "message": "Zone Group Deleted Successfully",
+		    "status": true,
+		    "status_code": 204
+		}
+	Error : 
+		{
+		    "message": "Invalid Zone Group selected",
+		    "status_code": 404,
+		    "status": false
+		}

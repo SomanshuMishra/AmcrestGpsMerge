@@ -1,0 +1,3 @@
+#!/bin/sh
+rm -rf /home/ubuntu/amcrest_gps_pro/celerybeat-schedule
+. /home/ubuntu/env/bin/activate

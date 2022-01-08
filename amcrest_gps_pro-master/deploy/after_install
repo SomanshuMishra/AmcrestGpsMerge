@@ -1,0 +1,8 @@
+#!/bin/sh
+. /home/ubuntu/env/bin/activate
+pip install -r /home/ubuntu/amcrest_gps_pro/requirements.txt
+pip install pymongo[srv]
+python /home/ubuntu/amcrest_gps_pro/manage.py migrate
+python /home/ubuntu/amcrest_gps_pro/manage.py migrate --database=listener_db
+
+
