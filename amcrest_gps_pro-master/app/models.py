@@ -66,7 +66,8 @@ class Subscription(models.Model):
 	device_in_use = models.BooleanField(default=True, null=True)
 	record_date = models.DateTimeField(auto_now_add=True)
 	device_listing = models.BooleanField(default=True, null=True)
-
+	# def __str__(self):
+	# 		return self.customer_id	
 	class Meta:
 		managed = True
 		app_label = 'app'
@@ -83,6 +84,8 @@ class Subscription(models.Model):
 			models.Index(fields=['customer_id']),
 			models.Index(fields=['subscription_id']),
 		]
+		
+  
 
 
 class ZoneGroup(models.Model):

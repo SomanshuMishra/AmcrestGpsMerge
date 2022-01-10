@@ -128,14 +128,22 @@ class SubscriptionDeviceListView(APIView):
 		if customer_id == str(token_customer_id):
 			category = 'gps'
 			category_list = self.get_device_categories(category)
+			# print(category_list,'CATEGORY LIST')
 			devices = Subscription.objects.filter(customer_id=customer_id, device_in_use=True, device_listing=True, device_model__in=category_list).all()
+			# print(devices,'DEVICES')
+
 			if devices:
+				# print('Inside Devices')
 				serializer = DeviceListSerializer(devices, many=True)				
+				# print('Inside Devices2')
 				get_gps_device_details_list = self.get_gps_device_details(serializer.data)
     
-			category = 'obd'
+			# category = 'obd'
+			# print('OBD HERE')
 			category_list = self.get_device_categories(category)
+			# print(category_list,'category? obd')
 			devices = Subscription.objects.filter(customer_id=customer_id, device_in_use=True, device_listing=True, device_model__in=category_list).all()
+			# print(devices,'DEVICES OBD')
 			if devices:
 				serializer = DeviceListSerializer(devices, many=True)				
 				get_device_details_list = self.get_device_details(serializer.data)
@@ -212,7 +220,10 @@ class SubscriptionDeviceListView(APIView):
 
 
 	def get_device_categories(self, category):
+		# print(category)
 		categories = SimMapping.objects.filter(category=category).values('model').distinct()
+		# print(categories,'Categories')
+		# print(categories,'Categories')
 		category_list = [i.get('model') for i in categories]
 		return category_list
 
@@ -380,7 +391,7 @@ class GpsObdZoneView(APIView):
 			obd_serializer = ZoneObdSerializer(obd_zone, many=True)
 			return JsonResponse({'message':'Zone list successfull', 'status':True, 'status_code':200, 'gps_zone':gps_serializer.data,'obd_zone':obd_serializer.data}, status=200)
 		elif len(gps_zone)!=0:
-			print('IN GPS ZONE')
+			# print('IN GPS ZONE')
 			gps_serializer = ZoneReadSerializer(gps_zone, many=True)
 			return JsonResponse({'message':'Zone list successfull', 'status':True, 'status_code':200, 'gps_zone':gps_serializer.data}, status=200)
 		elif len(obd_zone)!=0:

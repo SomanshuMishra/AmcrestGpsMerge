@@ -1058,6 +1058,7 @@ class UserLoginView(APIView):
                     if user:
                         password_status = user.check_password(password)
                         if password_status:
+                            print('PASS')
                             payload = jwt_payload_handler(user)
                             token = jwt_encode_handler(payload)
                             self.update_user_login_details(user)
