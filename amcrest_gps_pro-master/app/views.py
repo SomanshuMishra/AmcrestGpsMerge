@@ -138,7 +138,7 @@ class SubscriptionDeviceListView(APIView):
 				# print('Inside Devices2')
 				get_gps_device_details_list = self.get_gps_device_details(serializer.data)
     
-			# category = 'obd'
+			category = 'obd'
 			# print('OBD HERE')
 			category_list = self.get_device_categories(category)
 			# print(category_list,'category? obd')
@@ -222,7 +222,7 @@ class SubscriptionDeviceListView(APIView):
 	def get_device_categories(self, category):
 		# print(category)
 		categories = SimMapping.objects.filter(category=category).values('model').distinct()
-		# print(categories,'Categories')
+		print(categories,'Categories')
 		# print(categories,'Categories')
 		category_list = [i.get('model') for i in categories]
 		return category_list
@@ -1019,7 +1019,7 @@ class CancelledDeviceListView(APIView):
             gps_user_serializer = UserInfoSerializer(user)
 			# Obd Cancelled Device List
             obd_category_list = self.get_device_categories('obd')
-            devices = Subscription.objects.filter(customer_id=customer_id, device_listing=False, device_in_use=True, device_model__in=category_list).all()
+            devices = Subscription.objects.filter(customer_id=customer_id, device_listing=False, device_in_use=True, device_model__in=obd_category_list).all()
             obd_serializer = SubscriptionInactiveDeviceSerializer(devices, many=True)
             obd_user_serializer = UserInfoSerializer(user)
             return JsonResponse({'message':'inactive Devices', 'status_code':200, 'status':True,'gps':{ 'gps_devices':gps_serializer.data, 'gps_user_details':gps_user_serializer.data},'obd':{ 'obd_devices':obd_serializer.data, 'obd_user_details':obd_user_serializer.data}})

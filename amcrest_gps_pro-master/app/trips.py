@@ -46,7 +46,7 @@ class GetAvailableDates(APIView):
 		self.running_from = None
 		self.send_time = None
 		
-	def get(self, request, customer_id, imei):
+	def getold(self, request, customer_id, imei):
 		close_old_connections()
 		# mongoengine.connect(host="mongodb+srv://"+urllib.parse.quote_plus(settings.MONGO_USER)+":"+urllib.parse.quote_plus(settings.MONGO_PASSWORD)+"@amcrestobd-hhn08.mongodb.net/test?retryWrites=true", alias='available_trip_dates')
 		category = request.GET.get('category', None)
@@ -70,6 +70,34 @@ class GetAvailableDates(APIView):
 				serializer = TripDateAvailableSerializer(user_trip, many=True)
 			# disconnect(alias='available_trip_dates')
 			return JsonResponse({'message': 'Avalailable Trip Dates', 'status_code':200, 'status':True, 'details':serializer.data, 'trip_running':check_trip_running, 'running_from':self.running_from, 'trip_start_time':self.send_time}, status=200)
+		else:
+			# disconnect(alias='available_trip_dates')
+			return JsonResponse({'message': 'No Trips Avalailable', 'status_code':200, 'status':True, 'details':[], 'trip_running':check_trip_running, 'running_from':self.running_from, 'trip_start_time':self.send_time}, status=200)
+
+	def get(self, request, customer_id, imei):
+		close_old_connections()
+		print(('HEERE'))
+
+		# category = request.GET.get('category', None)
+		gps_check_trip_running = self.get_current_trip_data(imei)
+		print(('HEERE1'))
+
+		obd_check_trip_running = self.get_current_obd_trip_data(imei)
+		print(('HEERE2'))
+
+		check_imei = Subscription.objects.filter(imei_no=imei, customer_id=customer_id).last()
+		if check_imei:
+			time_threshold = datetime.datetime.now() - datedelta.datedelta(months=6)
+			from_date = str(time_threshold.year)+'-'+str(time_threshold.month)+'-'+str(time_threshold.day)+' 00:00:00'
+			print('HERE3')
+			obd_user_trip = UserObdTrip.objects.filter(imei=imei, customer_id=customer_id, record_date__gte=datetime.datetime.strptime(from_date, '%Y-%m-%d %H:%M:%S')).all().order_by('-record_date')
+			print('CHECK')
+			obd_serializer = TripObdDateAvailableSerializer(obd_user_trip, many=True)
+			
+			gps_user_trip = UserTrip.objects.filter(imei=imei, customer_id=customer_id, gps_record_date__gte=datetime.datetime.strptime(from_date, '%Y-%m-%d %H:%M:%S')).all().order_by('-record_date')
+			gps_serializer = TripDateAvailableSerializer(user_trip, many=True)
+			
+			return JsonResponse({'message': 'Avalailable Trip Dates', 'status_code':200, 'status':True, 'obd':{'obd_details':obd_serializer.data, 'obd_trip_running':obd_check_trip_running, 'running_from':self.running_from, 'trip_start_time':self.send_time},'gps':{'gps_details':gps_serializer.data, 'gps_trip_running':gps_check_trip_running, 'running_from':self.running_from, 'trip_start_time':self.send_time}}, status=200)
 		else:
 			# disconnect(alias='available_trip_dates')
 			return JsonResponse({'message': 'No Trips Avalailable', 'status_code':200, 'status':True, 'details':[], 'trip_running':check_trip_running, 'running_from':self.running_from, 'trip_start_time':self.send_time}, status=200)
@@ -355,9 +383,8 @@ class CurrentTripView(APIView):
 
 class LastTripView(APIView):
 	# permission_classes = (AllowAny,)
-	def get(self, request, imei, customer_id):
+	def getold(self, request, imei, customer_id):
 		type_ = request.GET.get('category', 'gps')
-
 		if type_ == 'gps':
 			user_trip = UserTrip.objects.filter(imei=imei, customer_id=customer_id).order_by('-id').first()
 		else:
@@ -383,6 +410,60 @@ class LastTripView(APIView):
 		return JsonResponse({'message':'Invalid Details, cannot find trip', 'status':False, 'status_code':404}, status=200)
 
 
+	def get(self, request, imei, customer_id):
+		gps_user_trip = UserTrip.objects.filter(imei=imei, customer_id=customer_id).order_by('-id').first()
+		obd_user_trip = UserObdTrip.objects.filter(imei=imei, customer_id=customer_id).order_by('-id').first()
+		if gps_user_trip & obd_user_trip:
+			# For GPS Last Trip
+			gps_idle_time_records = []
+			gps_idle_times = 0
+			type_='gps'
+			gps_trip_measurement = self.get_trip_measurements(gps_user_trip.measure_id, type_)
+			gps_trip_object = {}
+			gps_trip_object['last_trip'] = gps_user_trip.trip_log[-1]
+			gps_trip_object['distance'] = trip_measurement['total_distance'][-1]
+			gps_trip_object['time'] = trip_measurement['total_time'][-1]
+			# For OBD Last Trip
+			type_='obd'
+			obd_trip_measurement = self.get_trip_measurements(obd_user_trip.measure_id, type_)
+			obd_trip_object = {}
+			obd_trip_object['last_trip'] = user_trip.trip_log[-1]
+			obd_trip_object['distance'] = trip_measurement['total_distance'][-1]
+			obd_trip_object['time'] = trip_measurement['total_time'][-1]
+			date = {
+					'start':user_trip.trip_log[0][0].get('send_time'),
+					'end':user_trip.trip_log[-1][-1].get('send_time')
+				}
+			obd_idle_times = self.idle_time(date, imei)
+			obd_idle_time_records = self.get_idle_time_records(date, imei)
+
+			return JsonResponse({'message':'Last Trip Log of GPS and OBD', 'status':True, 'status_code':200 , 'gps':{ 'gps_trip':gps_trip_object, 'gps_idle_time_records':gps_idle_time_records, 'gps_idle_times':gps_idle_times}, 'obd':{ 'obd_trip':obd_trip_object, 'obd_idle_time_records':obd_idle_time_records, 'obd_idle_times':obd_idle_times}}, status=200)
+
+		elif gps_user_trip:
+			type_='gps'
+			trip_measurement = self.get_trip_measurements(user_trip.measure_id, type_)
+			trip_object = {}
+			trip_object['last_trip'] = user_trip.trip_log[-1]
+			trip_object['distance'] = trip_measurement['total_distance'][-1]
+			trip_object['time'] = trip_measurement['total_time'][-1]
+			return JsonResponse({'message':'Last Trip Log', 'status':True, 'status_code':200, 'gps_trip':trip_object, 'gps_idle_records':idle_time_records, 'gps_idle_time':idle_times}, status=200)
+
+		elif obd_user_trip:
+			type_='obd'
+			obd_trip_measurement = self.get_trip_measurements(obd_user_trip.measure_id, type_)
+			obd_trip_object = {}
+			obd_trip_object['last_trip'] = user_trip.trip_log[-1]
+			obd_trip_object['distance'] = trip_measurement['total_distance'][-1]
+			obd_trip_object['time'] = trip_measurement['total_time'][-1]
+			date = {
+					'start':user_trip.trip_log[0][0].get('send_time'),
+					'end':user_trip.trip_log[-1][-1].get('send_time')
+				}
+			obd_idle_times = self.idle_time(date, imei)
+			obd_idle_time_records = self.get_idle_time_records(date, imei)
+			return JsonResponse({'message':'Last Trip Log', 'status':True, 'status_code':200, 'obd_trip':obd_trip_object, 'obd_idle_records':obd_idle_time_records, 'obd_idle_time':obd_idle_times}, status=200)
+  
+		return JsonResponse({'message':'Invalid Details, cannot find trip', 'status':False, 'status_code':404}, status=200)
 
 	def get_trip_measurements(self, measure_id, type_):
 		if type_ == 'gps':
