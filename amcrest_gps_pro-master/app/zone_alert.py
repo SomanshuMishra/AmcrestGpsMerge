@@ -26,7 +26,7 @@ from .models import *
 
 class ZoneAlertView(APIView):
 	# permission_classes = (AllowAny,)
-	def post(self, request):
+	def postold(self, request):
 		error = []
 		try:
 			customer_id = request.user.customer_id
@@ -50,7 +50,37 @@ class ZoneAlertView(APIView):
 				return JsonResponse({'message':'Zone Alert Created Successfully', 'errors':error, 'status_code':201, 'status':True}, status=201)
 			return JsonResponse({'message':'Bad Request, Device IMEI Required', 'status':False, 'status_code':400}, status=200)
 		return JsonResponse({'message':'Unauthorized Access', 'status':False, 'status_code':401}, status=401)
-
+	
+ 
+	def post(self, request):
+		gps_error = []
+		obd_error = []
+		try:
+			customer_id = request.user.customer_id
+		except Exception as e:
+			customer_id = None
+		category1=  "category"
+		category2=  "gps"
+		if str(customer_id) == str(request.data.get('customer_id')):
+			if request.data.get('imei'):
+				for imei in request.data.get('imei'):
+					if request.data.get('zones', None):
+						# OBD Zone Error
+						obd_zone_error = self.create_zone_alert_for_device(imei, request.data, category1)
+						obd_error.extend(obd_zone_error)
+						# GPS Zone Error
+						gps_zone_error = self.create_zone_alert_for_device(imei, request.data, category2)
+						gps_error.extend(obd_zone_error)
+					if request.data.get('zone_group', None):
+						# OBD Zone Group Error
+						obd_zone_group_error = self.create_zone_group_alert_for_device(imei, request.data, category1)
+						obd_error.extend(obd_zone_group_error)
+						# GPS Zone Group Error
+						gps_zone_group_error = self.create_zone_group_alert_for_device(imei, request.data, category2)
+						gps_error.extend(gps_zone_group_error)
+				return JsonResponse({'message':'Zone Alert Created Successfully', 'obd_errors':obd_error,'gps_errors':gps_error, 'status_code':201, 'status':True}, status=201)
+			return JsonResponse({'message':'Bad Request, Device IMEI Required', 'status':False, 'status_code':400}, status=200)
+		return JsonResponse({'message':'Unauthorized Access', 'status':False, 'status_code':401}, status=401)
 
 	def create_zone_alert_for_device(self, imei, data, category):
 		error = []
@@ -107,21 +137,25 @@ class ZoneAlertView(APIView):
 	def get(self, request):
 		zone = request.GET.get('zone', None)
 		customer_id_get = request.GET.get('customer_id', None)
+		print(zone,customer_id_get)
 		try:
 			customer_id = request.user.customer_id
 		except Exception as e:
 			customer_id = None
-
-		try:
-			category = request.GET.get('category', None)
-		except(Exception)as e:
-			return JsonResponse({'message':'Category Required', 'status':False, 'status_code':400}, status=200)
-
+		# try:
+		# 	category = request.GET.get('category', None)
+		# except(Exception)as e:
+		# 	return JsonResponse({'message':'Category Required', 'status':False, 'status_code':400}, status=200)
+		category1 = 'gps'
+		category2 = 'obd'
+		print(customer_id,'cust')
 		if customer_id_get:
 			if str(customer_id) == str(customer_id_get):
-				zone_alert = ZoneAlert.objects.filter(customer_id=customer_id, category=category).all()
-				serializer = ZoneAlertReadSerializer(zone_alert, many=True)
-				return JsonResponse({'message':'Zone Alert list of the user', 'status_code':200, 'status':True, 'zone_alert':serializer.data}, status=200)
+				gps_zone_alert = ZoneAlert.objects.filter(customer_id=customer_id, category=category1).all()
+				gps_serializer = ZoneAlertReadSerializer(gps_zone_alert, many=True)
+				obd_zone_alert = ZoneAlert.objects.filter(customer_id=customer_id, category=category2).all()
+				obd_serializer = ZoneAlertReadSerializer(obd_zone_alert, many=True)
+				return JsonResponse({'message':'Zone Alert list of the user', 'status_code':200, 'status':True, 'gps_zone_alert':gps_serializer.data,'obd_zone_alert':obd_serializer.data}, status=200)
 			return JsonResponse({'message':'Invalid Request, You are not Authorized to access', 'status_code':401, 'status':False}, status=401)
 		elif zone:
 			zone_instance = Zones.objects.filter(id=zone).first()
@@ -136,6 +170,7 @@ class ZoneAlertView(APIView):
 
 
 	def put(self, request):
+		print(request.data)
 		customer_id_get = request.data.get('customer_id', None)
 		try:
 			customer_id = request.user.customer_id
@@ -145,7 +180,7 @@ class ZoneAlertView(APIView):
 		id = request.data.get('id', None)
 		if id:
 			if str(customer_id) == str(customer_id_get):
-				zone_alert = ZoneAlert.objects.filter(id=id).first()
+				zone_alert = ZoneAlert.objects.filter(customer_id=id).first()
 				if zone_alert:
 					if str(zone_alert.customer_id)== str(customer_id):
 						serializer = ZoneAlertUpdateSerializer(zone_alert, data=request.data)
@@ -167,7 +202,7 @@ class ZoneAlertView(APIView):
 
 		id = request.data.get('id', None)
 		if id:
-			zone_alert = ZoneAlert.objects.filter(id=id).first()
+			zone_alert = ZoneAlert.objects.filter(customer_id=id).first()
 			if zone_alert:
 				if str(zone_alert.customer_id)== str(customer_id):
 					zone_alert.delete()

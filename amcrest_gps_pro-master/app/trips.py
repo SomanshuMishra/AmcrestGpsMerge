@@ -410,14 +410,17 @@ class LastTripView(APIView):
 			return JsonResponse({'message':'Last Trip Log', 'status':True, 'status_code':200, 'trip':trip_object, 'idle_records':idle_time_records, 'idle_time':idle_times}, status=200)
 		return JsonResponse({'message':'Invalid Details, cannot find trip', 'status':False, 'status_code':404}, status=200)
 
-
 	def get(self, request, imei, customer_id):
+		print('Last Trip View')
 		gps_user_trip = UserTrip.objects.filter(imei=imei, customer_id=customer_id).order_by('-id').first()
+		print('sdas')
 		obd_user_trip = UserObdTrip.objects.filter(imei=imei, customer_id=customer_id).order_by('-id').first()
+		print('sdas1')
 		if gps_user_trip & obd_user_trip:
 			# For GPS Last Trip
 			gps_idle_time_records = []
 			gps_idle_times = 0
+			print('NOw')
 			type_='gps'
 			gps_trip_measurement = self.get_trip_measurements(gps_user_trip.measure_id, type_)
 			gps_trip_object = {}
