@@ -76,6 +76,7 @@ class GetAvailableDates(APIView):
 
 	def get(self, request, customer_id, imei):
 		close_old_connections()
+		print(imei,'IMEI')
 		print(('HEERE'))
 
 		# category = request.GET.get('category', None)

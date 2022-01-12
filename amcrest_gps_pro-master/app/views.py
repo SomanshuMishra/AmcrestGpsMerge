@@ -128,22 +128,22 @@ class SubscriptionDeviceListView(APIView):
 		if customer_id == str(token_customer_id):
 			category = 'gps'
 			category_list = self.get_device_categories(category)
-			# print(category_list,'CATEGORY LIST')
+			print(category_list,'CATEGORY LIST')
 			devices = Subscription.objects.filter(customer_id=customer_id, device_in_use=True, device_listing=True, device_model__in=category_list).all()
-			# print(devices,'DEVICES')
+			print(devices,'DEVICES')
 
 			if devices:
-				# print('Inside Devices')
+				print('Inside Devices')
 				serializer = DeviceListSerializer(devices, many=True)				
-				# print('Inside Devices2')
+				print('Inside Devices2')
 				get_gps_device_details_list = self.get_gps_device_details(serializer.data)
     
 			category = 'obd'
-			# print('OBD HERE')
+			print('OBD HERE')
 			category_list = self.get_device_categories(category)
-			# print(category_list,'category? obd')
+			print(category_list,'category? obd')
 			devices = Subscription.objects.filter(customer_id=customer_id, device_in_use=True, device_listing=True, device_model__in=category_list).all()
-			# print(devices,'DEVICES OBD')
+			print(devices,'DEVICES OBD')
 			if devices:
 				serializer = DeviceListSerializer(devices, many=True)				
 				get_device_details_list = self.get_device_details(serializer.data)
@@ -385,7 +385,9 @@ class GpsObdZoneView(APIView):
 
 	def get(self, request, customer_id):
 		gps_zone = Zones.objects.filter(customer_id=customer_id).all()
-		obd_zone = ZoneObd.objects.filter(customer_id=customer_id).all()		
+		obd_zone = ZoneObd.objects.filter(customer_id=customer_id).all()	
+		print(gps_zone,'GPS ZONE')
+		print(obd_zone,'OBD ZONE')
 		if len(gps_zone)!=0 and len(obd_zone)!=0:
 			gps_serializer = ZoneReadSerializer(gps_zone, many=True)
 			obd_serializer = ZoneObdSerializer(obd_zone, many=True)
@@ -986,6 +988,7 @@ class 	MapSettingsUpdate(APIView):
 	def put(self, request):
 		cust = request.data.get('customer_id', None)
 		if cust:
+			print(request.data)
 			map_setings = MapSettings.objects.filter(customer_id=cust).last()
 			if map_setings:
 				serializer = MapSettingsSerializer(map_setings, data=request.data)
@@ -1011,6 +1014,7 @@ class CancelledDeviceListView(APIView):
     def get(self, request, customer_id):
         user = User.objects.filter(customer_id=customer_id, subuser=False).first()
         # category = request.GET.get('category')
+        print(user,'USER')
         if user:
 			# Gps Cancelled Device List
             gps_category_list = self.get_device_categories('gps')

@@ -140,7 +140,7 @@ class SettingModuleView(APIView):
 
 class SettingDevicesView(APIView):
 	# permission_classes = (AllowAny,)
-	def get(self, request, customer_id):
+	def getold(self, request, customer_id):
 		try:
 			category = request.GET['category']
 		except(Exception)as e:
@@ -154,6 +154,27 @@ class SettingDevicesView(APIView):
 			settings = SettingsModel.objects.filter(imei__in=imei).all()
 			serializer = SettingsSerializer(settings, many=True)
 			return JsonResponse({'message':'settings of device', 'status_code':200, 'status':True, 'settings':serializer.data}, status=200)
+		else:
+			return JsonResponse({'message':'Device not found', 'status_code':404, 'status':False, 'settings':[]}, status=200)
+
+	def get(self, request, customer_id):
+     
+		gps_category_list = self.get_device_categories('gps')
+		obd_category_list = self.get_device_categories('obd')
+		
+		gps_subscriptions = Subscription.objects.filter(customer_id=customer_id, device_model__in=gps_category_list, device_in_use=True, device_listing=True).all()
+  
+		obd_subscriptions = Subscription.objects.filter(customer_id=customer_id, device_model__in=obd_category_list, device_in_use=True, device_listing=True).all()
+		if gps_subscriptions or obd_subscriptions:
+			if gps_subscriptions:
+				imei = [subscription.imei_no for subscription in gps_subscriptions]
+				settings = SettingsModel.objects.filter(imei__in=imei).all()
+				gps_serializer = SettingsSerializer(settings, many=True)
+			if obd_subscriptions:
+				imei = [subscription.imei_no for subscription in obd_subscriptions]
+				settings = SettingsModel.objects.filter(imei__in=imei).all()
+				obd_serializer = SettingsSerializer(settings, many=True)
+			return JsonResponse({'message':'settings of device', 'status_code':200, 'status':True, 'gps_settings':gps_serializer.data,'obd_settings':obd_serializer.data}, status=200)
 		else:
 			return JsonResponse({'message':'Device not found', 'status_code':404, 'status':False, 'settings':[]}, status=200)
 
